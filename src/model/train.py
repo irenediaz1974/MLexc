@@ -5,8 +5,13 @@ import glob
 import os
 
 import pandas as pd
-
+import numpy as np
+from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_curve
+import matplotlib.pyplot as plt
+
 
 
 # define functions
@@ -33,7 +38,11 @@ def get_csvs_df(path):
     return pd.concat((pd.read_csv(f) for f in csv_files), sort=False)
 
 
-# TO DO: add function to split data
+def split_data(df):
+    X, y = df[['Pregnancies','PlasmaGlucose','DiastolicBloodPressure','TricepsThickness','SerumInsulin','BMI','DiabetesPedigree','Age']].values, df['Diabetic'].values
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=0)
+    return ( X_train, X_test, y_train, y_test)
+
 
 
 def train_model(reg_rate, X_train, X_test, y_train, y_test):
